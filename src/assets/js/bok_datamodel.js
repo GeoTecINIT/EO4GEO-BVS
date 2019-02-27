@@ -28,6 +28,9 @@ CostumD3Node = function () {
     this.sourceDocuments = [];
 
     this.uri = "";
+
+    //field required to discard the old one when notation is repeated
+    this.timestamp = "";
 };
 
 CostumD3NodeCollection = function () {
@@ -40,9 +43,13 @@ CostumD3NodeCollection.prototype.add = function (node) {
     this.nodes.push(node);
 };
 
+CostumD3NodeCollection.prototype.pop = function () {
+    this.nodes.pop();
+};
+
 CostumD3NodeCollection.prototype.getNodeByURI = function (uri) {
     for (var i = 0; i < this.nodes.length; i++) {
-        if (this.nodes[i].id == uri) {
+        if (this.nodes[i].id.split("_rev")[0] == uri) {
             return this.nodes[i];
         }
     }
@@ -127,26 +134,26 @@ CostumD3NodeCollection.prototype.getNodesIdByKeyword = function (keyword) {
             }
         }
     }
-   /* UNCOMMENT TO SEARCH IN PREREQUISITES, POSTREQUISITES AND DEMONSTRABLE SKILLS
-    
-    for (var j = 0; j < this.nodes[i].prerequisites.length; j++) {
-          if (this.nodes[i].prerequisites[j].toUpperCase().indexOf(keyword) > -1) {
-              result.push(this.nodes[i].id);
-              break;
-          }
-      }
-      for (var k = 0; k < this.nodes[i].postrequisites.length; k++) {
-          if (this.nodes[i].postrequisites[k].toUpperCase().indexOf(keyword) > -1) {
-              result.push(this.nodes[i].id);
-              break;
-          }
-      }
-      for (var l = 0; l < this.nodes[i].demonstrableSkills.length; l++) {
-          if (this.nodes[i].demonstrableSkills[l].description.toUpperCase().indexOf(keyword) > -1) {
-              result.push(this.nodes[i].id);
-              break;
-          }
-      }*/
+    /* UNCOMMENT TO SEARCH IN PREREQUISITES, POSTREQUISITES AND DEMONSTRABLE SKILLS
+     
+     for (var j = 0; j < this.nodes[i].prerequisites.length; j++) {
+           if (this.nodes[i].prerequisites[j].toUpperCase().indexOf(keyword) > -1) {
+               result.push(this.nodes[i].id);
+               break;
+           }
+       }
+       for (var k = 0; k < this.nodes[i].postrequisites.length; k++) {
+           if (this.nodes[i].postrequisites[k].toUpperCase().indexOf(keyword) > -1) {
+               result.push(this.nodes[i].id);
+               break;
+           }
+       }
+       for (var l = 0; l < this.nodes[i].demonstrableSkills.length; l++) {
+           if (this.nodes[i].demonstrableSkills[l].description.toUpperCase().indexOf(keyword) > -1) {
+               result.push(this.nodes[i].id);
+               break;
+           }
+       }*/
     for (var i = 0; i < this.nodes.length; i++) {
         if (this.nodes[i].description != null && this.nodes[i].description != "") {
             if (this.nodes[i].description.toUpperCase().indexOf(keyword) > -1) {
@@ -290,8 +297,8 @@ removeNodesWithNoParent = function (costumD3Collection) {
             added++;
         }
     }
-    console.log("Total nodes incorrect: %i", removed);
-    console.log("Total nodes correct: %i", added);
+    console.log("Total nodes with no parent: %i", removed);
+    console.log("Total nodes with parent: %i", added);
 
     //change array of nodes to remove the null parents
     costumD3Collection.nodes = newNodes;
@@ -312,6 +319,8 @@ getHigherCostumD3Nodes = function (costumD3Collection) {
 
 parseConcepts = function (concepts) {
 
+    var listOfConceptNames = [];
+
     //Fake relations
     var relationCollection = new RelationCollection();
     //            var rel = new Relation("GC4", "GD11-3", Relationtype.PREREQUISITE);
@@ -330,17 +339,38 @@ parseConcepts = function (concepts) {
         var name = concepts[i].getAttribute("PrefLabel");
         var nameShort = concepts[i].getAttribute("Notation");
         var uri = concepts[i].getAttribute("URI");
+        var timestamp = concepts[i].getAttribute("TimeStamp");
         cD3N = new CostumD3Node();
         cD3N.description = description;
         cD3N.name = name;
         cD3N.nameShort = nameShort;
+        cD3N.timestamp = timestamp;
         cD3N.id = uri;
         cD3N.uri = uri;
+        
         if (namehash[cD3N.id] == null) {
             cD3NCollection.add(cD3N);
         }
         namehash[cD3N.id] = cD3N.name;
         colorhash[cD3N.nameShort.substring(0, 2)] = 0;
+
+        if (!listOfConceptNames.includes(nameShort)) {
+            listOfConceptNames.push(nameShort)
+        } else {
+            console.log("REPEATED NOTATION: " + nameShort);
+
+            var alreadyConcept = cD3NCollection.getNodeByNameShort(nameShort);
+            var alreadyTimestamp = new Date(alreadyConcept.timestamp)
+            var currentTimestamp = new Date(timestamp)
+
+            // If current node timestamp is newer, replace the old node
+            if (currentTimestamp > alreadyTimestamp ) {
+                console.log("**** REPLACED OLD CONCEPT " + alreadyConcept.nameShort + " " + alreadyConcept.name + " BY " +  nameShort + " " + name);
+                cD3NCollection.pop(); // Pop old one
+                cD3NCollection.pop(); // Pop old one
+                cD3NCollection.add(cD3N);  //Push new one
+            }
+        }
     }
     var i = 0;
     for (var key in colorhash) {
@@ -422,8 +452,8 @@ printWrongConcepts = function (costumD3Collection) {
         //We work with the CostumD3Collection and add the childrens and the parents
         //to the appropiate nodes
         for (var i = 0; i < relations.length; i++) {
-            var objectUri = relations[i].getAttribute("Object");
-            var subjectUri = relations[i].getAttribute("Subject");
+            var objectUri = relations[i].getAttribute("Object").split("_rev")[0];
+            var subjectUri = relations[i].getAttribute("Subject").split("_rev")[0];
             var predicateUri = relations[i].getAttribute("Predicate");
             var relation = getRelationFromPredicate(predicateUri);
             var object = costumD3Collection.getNodeByURI(objectUri);
@@ -437,8 +467,8 @@ printWrongConcepts = function (costumD3Collection) {
                         var alreadyChild = false;
                         //Here we check that the relation was not previously added to prevent duplicating concepts
                         for (var j = 0; j < object.children.length; j++) {
-                            if (object.children[j].uri == subjectUri) {
-                                // alreadyChild = true;
+                            if (object.children[j].uri.split("_rev")[0] == subjectUri) {
+                                alreadyChild = true;
                             }
                         }
                         if (!alreadyChild) {
@@ -446,7 +476,7 @@ printWrongConcepts = function (costumD3Collection) {
                             if (subject.parent == null) {
                                 object.children.push(subject);
                                 subject.parent = object;
-                            } else {
+                            } else if (subject.parent.nameShort != object.nameShort && subject.nameShort != object.nameShort) { // Because narrower relations we have to see if the parent is already there. And there are relations pointing to same concept with different revision
                                 //we will use the additional Parent to save other parents when more than one
                                 subject.additionalParents.push(object);
                                 //in case there are more than one parent, duplicate node
@@ -462,6 +492,37 @@ printWrongConcepts = function (costumD3Collection) {
                         }
                     }
 
+                }//If relation is NARROWER, it is a hierarchy relation, so we add the corresponding
+                //children and the corresponding parent to the node
+                else if (relation == Relationtype.NARROWER) {
+                    var subject = costumD3Collection.getNodeByURI(subjectUri);
+                    if (subject != null) {
+                        var alreadyChild = false;
+                        //Here we check that the relation was not previously added to prevent duplicating concepts
+                        for (var j = 0; j < subject.children.length; j++) {
+                            if (subject.children[j].uri.split("_rev")[0] == objectUri) {
+                                alreadyChild = true;
+                            }
+                        }
+                        if (!alreadyChild) {
+                            if (object.parent == null) {
+                                subject.children.push(object);
+                                object.parent = subject;
+                            } else if (object.parent.nameShort != subject.nameShort && subject.nameShort != object.nameShort) { // Because narrower relations we have to see if the parent is already there. And there are relations pointing to same concept with different revision
+                                //we will use the additional Parent to save other parents when more than one
+                                object.additionalParents.push(subject);
+                                //in case there are more than one parent, duplicate node
+
+                                var newCD3N = duplicateNode(object);
+                                subject.children.push(newCD3N);
+                                newCD3N.parent = subject;
+                                newCD3N.additionalParents.push(object.parent);
+
+                                cD3NCollection.add(newCD3N);
+
+                            }
+                        }
+                    }
                 }
                 //If relation is DEMONSTRATES, it is a leaf node (a Skill)
                 //and we add that skill to the correspoding concept

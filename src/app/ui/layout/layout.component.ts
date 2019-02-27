@@ -36,7 +36,7 @@ export class LayoutComponent implements OnInit {
       this.results = false;
       cleanSearchInBOK();
     }
-    console.log('RESULTS: ' + this.results);
+    // console.log('RESULTS: ' + this.results);
   }
 
   incrementLimit() {
@@ -50,7 +50,7 @@ export class LayoutComponent implements OnInit {
       this.currentConcept = null;
       browseToConcept('GIST');
     } else {
-      console.log('NAVIGATING TO: ' + key);
+     // console.log('NAVIGATING TO: ' + key);
       this.currentConcept = key;
       this.results = null;
 
