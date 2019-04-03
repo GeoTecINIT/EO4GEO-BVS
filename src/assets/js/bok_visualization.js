@@ -255,7 +255,7 @@ displayConcept = function (d, namehash) {
         tab += "";
         while (parents.length > 0) {
             parent = parents.pop();
-            text += "<dd style='margin: 0 0 1.5em 0.8em'><dl><dt style='color: #007bff; font-weight: 400; cursor: pointer;' class='concept-name' onclick='browseToConcept(\"" + parent.nameShort + "\")'><b>-</b> " + parent.name + "</dt>";
+            text += "<dd style='margin: 0 0 1.5em 0.8em'><dl><dt style='color: #007bff; font-weight: 400; cursor: pointer;' class='concept-name' onclick='browseToConcept(\"" + parent.nameShort + "\")'><b>-</b> "  + "[" + parent.nameShort + "] " +  parent.name + "</dt>";
             tab += "</dl></dd>";
         }
         text += tab + "</dl></div>";
@@ -316,7 +316,7 @@ displayUnorderedList = function (array, propertyname, headline, domElement, name
 
             /* We attach the browseToConcept function to each subconcept of the list */
             if (headline == "Subconcepts") {
-                text += "<a href='#' class='concept-name' id='sc-" + nameShort + "' onclick='browseToConcept(\"" + nameShort + "\")'>" + array[i][propertyname] + "</a> <br>";
+                text += "<a href='#' class='concept-name' id='sc-" + nameShort + "' onclick='browseToConcept(\"" + nameShort + "\")'>" + "[" + array[i].nameShort + "] " + array[i][propertyname] + "</a> <br>";
             }
             else if (headline == "Similar concepts" || headline == "Postrequisites" || headline == "Prequisites") {
                 text += "<a class='concept-name' onclick='browseToConcept(\"" + nameShort + "\")'>" + value + "</a> <br>";

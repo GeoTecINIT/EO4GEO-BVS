@@ -20776,7 +20776,7 @@
                  Object="http://www.bigknowledge.net/ontos/gin2k#DM5_Modeling_3D,_temporal_and_uncertain_phenomena_rev1"/>
    <Relationship Subject="http://www.bigknowledge.net/ontos/gin2k#DM5-2_Modelling_time_aspects_rev4"
                  Predicate="http://www.w3.org/2004/02/skos/core#broader"
-                 Object="http://www.bigknowledge.net/ontos/gin2k#DM5_Modeling_3D,_temporal_and_uncertain_phenomena_rev1"/>
+                 Object="http://www.bigknowledge.net/ontos/gin2k#DM5_Modelling_3D_temporal_and_uncertain_phenomena_rev2"/>
    <Relationship Subject="http://www.bigknowledge.net/ontos/gin2k#DM5-3-1_rev1"
                  Predicate="http://www.bigknowledge.net/ontos/2015/09/bok.owl#demonstrates"
                  Object="http://www.bigknowledge.net/ontos/gin2k#DM5-3_Modeling_three-dimensional_(3D)_entities_rev1"/>
