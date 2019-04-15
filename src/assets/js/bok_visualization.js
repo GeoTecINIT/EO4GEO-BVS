@@ -132,12 +132,14 @@ displayBOK = function (bokData) {
 
     var node = svg.selectAll("circle,text");
 
-    d3.select("#bubble")
-        // uncomment this line if you wish a colored background of the bubble chart:
-        //.style("background", color(-1))
-        .on("click", function () {
-            dataAndFunctions.zoom(root);
-        });
+      d3.select("#bubble")
+          // uncomment this line if you wish a colored background of the bubble chart:
+          //.style("background", color(-1))
+          .on("click", function () {
+           //   dataAndFunctions.zoom(root);
+          });
+  
+          
 
     zoomTo([root.x, root.y, root.r * 2 + margin]);
 
@@ -255,7 +257,7 @@ displayConcept = function (d, namehash) {
         tab += "";
         while (parents.length > 0) {
             parent = parents.pop();
-            text += "<dd style='margin: 0 0 1.5em 0.8em'><dl><dt style='color: #007bff; font-weight: 400; cursor: pointer;' class='concept-name' onclick='browseToConcept(\"" + parent.nameShort + "\")'><b>-</b> "  + "[" + parent.nameShort + "] " +  parent.name + "</dt>";
+            text += "<dd style='margin: 0 0 1.5em 0.8em'><dl><dt style='color: #007bff; font-weight: 400; cursor: pointer;' class='concept-name' onclick='browseToConcept(\"" + parent.nameShort + "\")'><b>-</b> " + "[" + parent.nameShort + "] " + parent.name + "</dt>";
             tab += "</dl></dd>";
         }
         text += tab + "</dl></div>";
@@ -388,7 +390,7 @@ createArrows = function (relations) {
 };
 
 createLabels = function (nodes, root) {
-    var text = svg.selectAll("text").data(nodes).enter().append("text").attr("class", "label").style("fill-opacity", function (d) {
+    var text = svg.selectAll("text").data(nodes).enter().append("text").attr("class", "label").style("pointer-events", "none").style("fill-opacity", function (d) {
         return d.parent === root || (d === root && d.children == null) ? 1 : 0;
     }).style("display", function (d) {
         return d.parent === root || (d === root && d.children == null) ? "inline" : "none";

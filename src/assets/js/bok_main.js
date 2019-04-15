@@ -21,3 +21,4 @@ d3.xml("assets/xml/saved-bok.xml", "application/xml", function (bokXML) {
 });
 
 d3.select(self.frameElement).style("height", diameter + "px");
+

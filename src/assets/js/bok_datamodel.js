@@ -69,22 +69,29 @@ CostumD3NodeCollection.prototype.getNodeByNameShort = function (nameShort) {
 CostumD3NodeCollection.prototype.getNodesByKeyword = function (keyword) {
     var result = []
     keyword = keyword.toUpperCase();
-    for (var i = 0; i < this.nodes.length; i++) {
-        if (this.nodes[i].nameShort.toUpperCase().indexOf(keyword) > -1) {
-            if (!result.includes(this.nodes[i])) {
-                result.push(this.nodes[i]);
+
+    if (searchWhatFieldSn) {
+        for (var i = 0; i < this.nodes.length; i++) {
+            if (this.nodes[i].nameShort.toUpperCase().indexOf(keyword) > -1) {
+                if (!result.includes(this.nodes[i])) {
+                    result.push(this.nodes[i]);
+                }
             }
         }
     }
-    for (var i = 0; i < this.nodes.length; i++) {
-        if (this.nodes[i].name && this.nodes[i].name.toUpperCase().indexOf(keyword) > -1) {
-            if (!result.includes(this.nodes[i])) {
-                result.push(this.nodes[i]);
+
+    if (searchWhatFieldNa) {
+        for (var i = 0; i < this.nodes.length; i++) {
+            if (this.nodes[i].name && this.nodes[i].name.toUpperCase().indexOf(keyword) > -1) {
+                if (!result.includes(this.nodes[i])) {
+                    result.push(this.nodes[i]);
+                }
             }
         }
     }
-    /* UNCOMMENT TO SEARCH IN PREREQUISITES, POSTREQUISITES AND DEMONSTRABLE SKILLS
-    
+    // UNCOMMENT TO SEARCH IN PREREQUISITES, POSTREQUISITES AND DEMONSTRABLE SKILLS
+
+    /*
     for (var j = 0; j < this.nodes[i].prerequisites.length; j++) {
             if (this.nodes[i].prerequisites[j].toUpperCase().indexOf(keyword) > -1) {
                 result.push(this.nodes[i]);
@@ -97,18 +104,30 @@ CostumD3NodeCollection.prototype.getNodesByKeyword = function (keyword) {
                 break;
             }
         } 
-        for (var l = 0; l < this.nodes[i].demonstrableSkills.length; l++) {
-            if (this.nodes[i].demonstrableSkills[l].description.toUpperCase().indexOf(keyword) > -1) {
-                result.push(this.nodes[i]);
-                break;
-            }
-        } */
 
-    for (var i = 0; i < this.nodes.length; i++) {
-        if (this.nodes[i].description != null && this.nodes[i].description != "") {
-            if (this.nodes[i].description.toUpperCase().indexOf(keyword) > -1) {
-                if (!result.includes(this.nodes[i])) {
-                    result.push(this.nodes[i]);
+        */
+
+    if (searchWhatFieldSk) {
+        for (var i = 0; i < this.nodes.length; i++) {
+            if (this.nodes[i].demonstrableSkills != null && this.nodes[i].demonstrableSkills != "" && this.nodes[i].demonstrableSkills.length > 0) {
+                for (var j = 0; j < this.nodes[i].demonstrableSkills.length; j++) {
+                    if (this.nodes[i].demonstrableSkills[j].description.toUpperCase().indexOf(keyword) > -1) {
+                        if (!result.includes(this.nodes[i])) {
+                            result.push(this.nodes[i]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (searchWhatFieldDe) {
+        for (var i = 0; i < this.nodes.length; i++) {
+            if (this.nodes[i].description != null && this.nodes[i].description != "") {
+                if (this.nodes[i].description.toUpperCase().indexOf(keyword) > -1) {
+                    if (!result.includes(this.nodes[i])) {
+                        result.push(this.nodes[i]);
+                    }
                 }
             }
         }
@@ -120,22 +139,30 @@ CostumD3NodeCollection.prototype.getNodesByKeyword = function (keyword) {
 CostumD3NodeCollection.prototype.getNodesIdByKeyword = function (keyword) {
     var result = [];
     keyword = keyword.toUpperCase();
-    for (var i = 0; i < this.nodes.length; i++) {
-        if (this.nodes[i].nameShort.toUpperCase().indexOf(keyword) > -1) {
-            if (!result.includes(this.nodes[i])) {
-                result.push(this.nodes[i].id);
+
+    if (searchWhatFieldSn) {
+        for (var i = 0; i < this.nodes.length; i++) {
+            if (this.nodes[i].nameShort.toUpperCase().indexOf(keyword) > -1) {
+                if (!result.includes(this.nodes[i])) {
+                    result.push(this.nodes[i].id);
+                }
             }
         }
     }
-    for (var i = 0; i < this.nodes.length; i++) {
-        if (this.nodes[i].name && this.nodes[i].name.toUpperCase().indexOf(keyword) > -1) {
-            if (!result.includes(this.nodes[i])) {
-                result.push(this.nodes[i].id);
+
+    if (searchWhatFieldNa) {
+        for (var i = 0; i < this.nodes.length; i++) {
+            if (this.nodes[i].name && this.nodes[i].name.toUpperCase().indexOf(keyword) > -1) {
+                if (!result.includes(this.nodes[i])) {
+                    result.push(this.nodes[i].id);
+                }
             }
         }
     }
-    /* UNCOMMENT TO SEARCH IN PREREQUISITES, POSTREQUISITES AND DEMONSTRABLE SKILLS
-     
+    // UNCOMMENT TO SEARCH IN PREREQUISITES, POSTREQUISITES AND DEMONSTRABLE SKILLS
+
+
+    /*
      for (var j = 0; j < this.nodes[i].prerequisites.length; j++) {
            if (this.nodes[i].prerequisites[j].toUpperCase().indexOf(keyword) > -1) {
                result.push(this.nodes[i].id);
@@ -148,17 +175,30 @@ CostumD3NodeCollection.prototype.getNodesIdByKeyword = function (keyword) {
                break;
            }
        }
-       for (var l = 0; l < this.nodes[i].demonstrableSkills.length; l++) {
-           if (this.nodes[i].demonstrableSkills[l].description.toUpperCase().indexOf(keyword) > -1) {
-               result.push(this.nodes[i].id);
-               break;
-           }
-       }*/
-    for (var i = 0; i < this.nodes.length; i++) {
-        if (this.nodes[i].description != null && this.nodes[i].description != "") {
-            if (this.nodes[i].description.toUpperCase().indexOf(keyword) > -1) {
-                if (!result.includes(this.nodes[i])) {
-                    result.push(this.nodes[i].id);
+
+       */
+
+    if (searchWhatFieldSk) {
+        for (var i = 0; i < this.nodes.length; i++) {
+            if (this.nodes[i].demonstrableSkills != null && this.nodes[i].demonstrableSkills != "" && this.nodes[i].demonstrableSkills.length > 0) {
+                for (var j = 0; j < this.nodes[i].demonstrableSkills.length; j++) {
+                    if (this.nodes[i].demonstrableSkills[j].description.toUpperCase().indexOf(keyword) > -1) {
+                        if (!result.includes(this.nodes[i])) {
+                            result.push(this.nodes[i].id);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (searchWhatFieldDe) {
+        for (var i = 0; i < this.nodes.length; i++) {
+            if (this.nodes[i].description != null && this.nodes[i].description != "") {
+                if (this.nodes[i].description.toUpperCase().indexOf(keyword) > -1) {
+                    if (!result.includes(this.nodes[i])) {
+                        result.push(this.nodes[i].id);
+                    }
                 }
             }
         }
@@ -347,7 +387,7 @@ parseConcepts = function (concepts) {
         cD3N.timestamp = timestamp;
         cD3N.id = uri;
         cD3N.uri = uri;
-        
+
         if (namehash[cD3N.id] == null) {
             cD3NCollection.add(cD3N);
         }
@@ -364,8 +404,8 @@ parseConcepts = function (concepts) {
             var currentTimestamp = new Date(timestamp)
 
             // If current node timestamp is newer, replace the old node
-            if (currentTimestamp > alreadyTimestamp ) {
-                console.log("**** REPLACED OLD CONCEPT " + alreadyConcept.nameShort + " " + alreadyConcept.name + " BY " +  nameShort + " " + name);
+            if (currentTimestamp > alreadyTimestamp) {
+                console.log("**** REPLACED OLD CONCEPT " + alreadyConcept.nameShort + " " + alreadyConcept.name + " BY " + nameShort + " " + name);
                 cD3NCollection.pop(); // Pop old one
                 cD3NCollection.pop(); // Pop old one
                 cD3NCollection.add(cD3N);  //Push new one

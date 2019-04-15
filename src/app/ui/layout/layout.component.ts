@@ -28,7 +28,7 @@ export class LayoutComponent implements OnInit {
 
   onChangeSearchText() {
     this.currentConcept = null;
-    if (this.searchText.length > 2) {
+    if (this.searchText.length >= 2) {
       this.selectedNodes = searchInBoK();
       this.results = this.selectedNodes.length > 0;
     } else {

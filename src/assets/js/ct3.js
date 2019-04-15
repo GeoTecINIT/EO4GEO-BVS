@@ -1,4 +1,9 @@
-var searchInputFieldDoc = document.getElementById("searchInputField");
+var searchInputFieldDoc = document.getElementById("searchInputField").value.trim();
+
+var searchWhatFieldSn = true;
+var searchWhatFieldNa = true;
+var searchWhatFieldDe = true;
+var searchWhatFieldSk = false;
 
 var links;
 var duration = d3.event && d3.event.altKey ? 5000 : 500;
@@ -9,8 +14,15 @@ var selectedNodes = [];
 function searchInBoK() {
     cleanSearchInBOK();
 
-    if (searchInputFieldDoc.value != "" && searchInputFieldDoc.value != " ") {
-        selectedNodes = dataAndFunctions.conceptNodeCollection.getNodesIdByKeyword(searchInputFieldDoc.value);
+    searchInputFieldDoc = document.getElementById("searchInputField").value.trim();
+
+    searchWhatFieldSn = document.getElementById("searchWhatFieldSn").checked;
+    searchWhatFieldNa = document.getElementById("searchWhatFieldNa").checked;
+    searchWhatFieldDe = document.getElementById("searchWhatFieldDe").checked;
+    searchWhatFieldSk = document.getElementById("searchWhatFieldSk").checked;
+
+    if (searchInputFieldDoc != "" && searchInputFieldDoc != " ") {
+        selectedNodes = dataAndFunctions.conceptNodeCollection.getNodesIdByKeyword(searchInputFieldDoc);
         //highlight search
         for (var i = 0; i < selectedNodes.length; i++) {
             var circle = document.getElementById(selectedNodes[i]);
@@ -20,7 +32,7 @@ function searchInBoK() {
             }
         }
     }
-    return dataAndFunctions.conceptNodeCollection.getNodesByKeyword(searchInputFieldDoc.value);
+    return dataAndFunctions.conceptNodeCollection.getNodesByKeyword(searchInputFieldDoc);
 }
 
 function cleanSearchInBOK() {
@@ -30,13 +42,13 @@ function cleanSearchInBOK() {
         if (circle != null) {
             circle.style.stroke = "";
             circle.style.strokeWidth = "";
-        } 
+        }
     }
     selectedNodes = [];
 }
 
 function searchValueChanged() {
-    if (searchInputFieldDoc.value == "" || searchInputFieldDoc.value == " ") {
+    if (searchInputFieldDoc == "" || searchInputFieldDoc == " ") {
         cleanSearchInBOK();
     }
 }

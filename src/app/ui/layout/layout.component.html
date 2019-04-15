@@ -5,10 +5,21 @@
     <div class="col center">
       <h2>Find & Navigate in BoK</h2>
     </div>
-    <div class="col center">
-      <h3>Enter term to search in Name and Description of BoK Concepts: </h3>
-      <input id="searchInputField" [(ngModel)]="searchText" placeholder="Search term here ..." (keyup)="onChangeSearchText()"
-        size="30">
+    <div class="col left">
+      <h3>Check the attributes to match with term searched: </h3>
+      <br>
+      <div class="row">
+        <div class="col left">
+          <input type="checkbox" id="searchWhatFieldSn" checked="checked"> Short Name / Code <br>
+          <input type="checkbox" id="searchWhatFieldNa" checked="checked"> Name / Title <br>
+          <input type="checkbox" id="searchWhatFieldDe" checked="checked"> Description  <br>
+          <input type="checkbox" id="searchWhatFieldSk" > Skills / Learning outcomes <br>
+        </div>
+        <div class="col left">
+          <input id="searchInputField" [(ngModel)]="searchText" placeholder="Search term here ..."
+            (keyup)="onChangeSearchText()" size="30">
+        </div>
+      </div>
       <br>
     </div>
   </div>
@@ -18,13 +29,13 @@
     </div>
     <div class="col" [hidden]="results">
       <h3 class="center" *ngIf="searchText && !currentConcept">No result(s) for {{ searchText }} </h3>
-      <a href="#" (click)="navigateToConcept('GIST')" > < Back </a>
-      <br>
-      <h5 id="headline"></h5>
-      <div id="description"></div>
-      <div #currentDescription id="currentDescription"></div>
-      <div id="moreButton"></div>
-      <div class="concept-name" id="accordion"></div>
+      <a href="#" (click)="navigateToConcept('GIST')">
+        < Back </a> <br>
+          <h5 id="headline"></h5>
+          <div id="description"></div>
+          <div #currentDescription id="currentDescription"></div>
+          <div id="moreButton"></div>
+          <div class="concept-name" id="accordion"></div>
     </div>
     <div class="col" *ngIf="results && !currentConcept">
       <h3 class="center">{{selectedNodes.length}} result(s) for {{ searchText }} </h3>
@@ -44,4 +55,3 @@
   </div>
   <app-footer>
   </app-footer>
-  
