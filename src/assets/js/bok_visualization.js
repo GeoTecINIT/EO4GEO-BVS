@@ -30,7 +30,6 @@ showMoreLess = function () {
             moreButton.innerHTML = "show more...";
         }
         ;
-
     }
     ;
 };
@@ -221,9 +220,10 @@ displayConcept = function (d, namehash) {
     //display description of concept.
     var description = document.getElementById("description");
     if (d.description != null) {
+        var timeFormat = "<small> Last Updated: " + new Date(d.timestamp).toUTCString() + " </small><br>";
         var headline = "<h5>Description:</h5>";
         var currentTxt = "<div id='currentDescription' class='hideContent'>" + d.description + "</div>";
-        description.innerHTML = headline + currentTxt;
+        description.innerHTML =timeFormat + headline + currentTxt;
         var current = document.getElementById("currentDescription");
 
         //insert 'more'-buttons:
