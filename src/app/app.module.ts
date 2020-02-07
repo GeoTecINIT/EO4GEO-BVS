@@ -3,18 +3,25 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { UiModule } from './ui/ui.module';
+
+import { LayoutComponent } from './ui/layout/layout.component';
+import { HeaderComponent } from './ui/header/header.component';
+import { FooterComponent } from './ui/footer/footer.component';
+import { FormsModule } from '@angular/forms';
+import { TruncatePipe } from './ui/layout/truncate.pipe';
+import { HighlightPipe } from './ui/layout/highlight.pipe';
 
 
 @NgModule({
   declarations: [
-    AppComponent  ],
+    AppComponent, LayoutComponent, HeaderComponent, FooterComponent, TruncatePipe, HighlightPipe],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    UiModule
-    ],
+    FormsModule
+  ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [LayoutComponent]
 })
 export class AppModule { }

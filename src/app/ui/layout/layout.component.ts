@@ -1,11 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { HighlightPipe } from './highlight.pipe';
-
-
-declare function searchInBoK(): any;
-declare function cleanSearchInBOK(): any;
-declare function browseToConcept(string): any;
-
+import * as bok from '@eo4geo/bok-dataviz';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-layout',
@@ -20,23 +16,36 @@ export class LayoutComponent implements OnInit {
   limitSearch = 5;
   currentConcept = null;
 
-  @ViewChild('currentDescription') curentDescriptionText: ElementRef;
+  searchCode = true;
+  searchName = true;
+  searchDes = true;
+  searchSkills = false;
 
-  constructor() { }
+  @ViewChild('currentDescription') curentDescriptionText: ElementRef;
+  @ViewChild('searchWhatFieldSn') searchWhatFieldSn: ElementRef;
+
+  constructor(private route: ActivatedRoute) { }
   ngOnInit() {
+    bok.visualizeBOKData('#bubbles', 'assets/json/eo4geoBOKv6.json', '#textBoK');
+
+    setTimeout(() => {
+      const id = this.route.snapshot.paramMap.get('conceptId');
+      if (id != null) {
+        bok.browseToConcept(id);
+      }
+    }, 1000);
   }
 
   onChangeSearchText() {
     this.currentConcept = null;
     if (this.searchText.length >= 2) {
-      this.selectedNodes = searchInBoK();
+      this.selectedNodes = bok.searchInBoK(this.searchText, this.searchCode, this.searchName, this.searchDes, this.searchSkills);
       this.results = this.selectedNodes.length > 0;
     } else {
       this.selectedNodes = [];
       this.results = false;
-      cleanSearchInBOK();
+      bok.cleanSearchInBOK();
     }
-    // console.log('RESULTS: ' + this.results);
   }
 
   incrementLimit() {
@@ -45,25 +54,19 @@ export class LayoutComponent implements OnInit {
 
   navigateToConcept(key) {
     if (this.searchText.length > 2 && this.currentConcept) { // Volver a resultados
-      // this.selectedNodes = searchInBoK();
       this.results = this.selectedNodes.length > 0;
       this.currentConcept = null;
-      browseToConcept('GIST');
+      bok.browseToConcept('GIST');
     } else {
-     // console.log('NAVIGATING TO: ' + key);
       this.currentConcept = key;
       this.results = null;
-
+      bok.browseToConcept(key);
       if (this.searchText.length > 2) {
         setTimeout(() => {
           const text = new HighlightPipe().transform(document.getElementById('currentDescription').innerHTML, this.searchText);
           document.getElementById('currentDescription').innerHTML = text;
-          const textAccordion = new HighlightPipe().transform(document.getElementById('accordion').innerHTML, this.searchText);
-          document.getElementById('accordion').innerHTML = textAccordion;
         }, 1000);
       }
-      browseToConcept(key);
-
     }
   }
 }
