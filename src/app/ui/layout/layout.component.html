@@ -10,10 +10,10 @@
       <br>
       <div class="row">
         <div class="col left">
-          <input type="checkbox" id="searchWhatFieldSn" checked="checked"> Short Name / Code <br>
-          <input type="checkbox" id="searchWhatFieldNa" checked="checked"> Name / Title <br>
-          <input type="checkbox" id="searchWhatFieldDe" checked="checked"> Description  <br>
-          <input type="checkbox" id="searchWhatFieldSk" > Skills / Learning outcomes <br>
+          <input type="checkbox" [(ngModel)]="searchCode" > Code <br>
+          <input type="checkbox" [(ngModel)]="searchName"> Name <br>
+          <input type="checkbox" [(ngModel)]="searchDes"> Description <br>
+          <input type="checkbox" [(ngModel)]="searchSkills"> Skills / Learning outcomes <br>
         </div>
         <div class="col left">
           <input id="searchInputField" [(ngModel)]="searchText" placeholder="Search term here ..."
@@ -24,20 +24,11 @@
     </div>
   </div>
   <div class="row">
-    <div class="col center">
-      <div id="bubble"></div>
+    <div class="col left">
+      <div id="bubbles"></div>
     </div>
-    <div class="col" [hidden]="results">
-      <h3 class="center" *ngIf="searchText && !currentConcept">No result(s) for {{ searchText }} </h3>
-      <a href="#" (click)="navigateToConcept('GIST')">
-        < Back </a> <br>
-          <h5 id="headline"></h5>
-          <div id="description"></div>
-          <div #currentDescription id="currentDescription"></div>
-          <div id="moreButton"></div>
-          <div class="concept-name" id="accordion"></div>
-    </div>
-    <div class="col" *ngIf="results && !currentConcept">
+    <div class="col right" id="textBoK" [hidden]="results"></div>
+    <div class="col right" *ngIf="results">
       <h3 class="center">{{selectedNodes.length}} result(s) for {{ searchText }} </h3>
       <div *ngFor="let item of selectedNodes; index as i">
         <div *ngIf="i < limitSearch">
