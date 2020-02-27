@@ -4,7 +4,7 @@ import { LayoutComponent } from './ui/layout/layout.component';
 
 const routes: Routes = [
   {
-    path: 'bok/:conceptId',
+    path: ':conceptId',
     pathMatch: 'full',
     component: LayoutComponent
   },
