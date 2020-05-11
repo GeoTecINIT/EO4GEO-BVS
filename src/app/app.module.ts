@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { TruncatePipe } from './ui/layout/truncate.pipe';
 import { HighlightPipe } from './ui/layout/highlight.pipe';
 
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { HighlightPipe } from './ui/layout/highlight.pipe';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
