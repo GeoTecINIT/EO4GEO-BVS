@@ -25,7 +25,7 @@ export class LayoutComponent implements OnInit {
   conceptBase = '';
   currentVersion = 0;
   currentYear = '';
-  private URL_BASE = 'https://eo4geo-uji.firebaseio.com/';
+  private URL_BASE = 'https://findinbok-release.firebaseio.com/';
 
   @ViewChild('currentDescription') curentDescriptionText: ElementRef;
   @ViewChild('searchWhatFieldSn') searchWhatFieldSn: ElementRef;

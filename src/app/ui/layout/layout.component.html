@@ -34,8 +34,10 @@
     </div>
     <div class="col right" id="textBoK" [hidden]="results"></div>
     <div class="col right" *ngIf="results">
-      <a href="javascript:void(0);"  (click)="detail = false; navigateToConcept('goBack'); conceptBase=''" *ngIf=" selectedNodes.length > 0 || (results && selectedNodes.length == 0)">
-        < To current concept </a>
+      <a href="javascript:void(0);"  (click)="navigateToConcept('goBack'); conceptBase=''" *ngIf=" selectedNodes.length > 0 || (results && selectedNodes.length == 0)">
+        < Back </a>
+        <a href="javascript:void(0);"  (click)="results=false; detail= true" >
+          < To current concept </a>
       <h3 class="center">{{selectedNodes.length}} result(s) for {{ searchText }} </h3>
       <div *ngFor="let item of selectedNodes; index as i">
         <div *ngIf="i < limitSearch">
