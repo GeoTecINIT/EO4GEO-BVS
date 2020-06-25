@@ -1,6 +1,8 @@
 <app-header>
 </app-header>
-<div class="jumbotron">
+<h6 class="center">The BoK is currently under development - you are currently viewing a preliminary version. A major update is
+  expected in July 2020. Stay tuned!</h6>
+<div class="jumbotron" style="padding-top: 2%;">
   <div class="row">
     <div class="col center">
       <h2>Find & Navigate in BoK</h2>
@@ -10,13 +12,12 @@
       <br>
       <div class="row">
         <div class="col left">
-          <input type="checkbox" [(ngModel)]="searchCode" > Code <br>
+          <input type="checkbox" [(ngModel)]="searchCode"> Code <br>
           <input type="checkbox" [(ngModel)]="searchName"> Name <br>
           <input type="checkbox" [(ngModel)]="searchDes"> Description <br>
           <input type="checkbox" [(ngModel)]="searchSkills"> Skills / Learning outcomes <br>
           <br>
-          <a href="javascript:void(0);" (click)="results = !results; currentConcept=''; detail = false"
-            *ngIf="detail">
+          <a href="javascript:void(0);" (click)="results = !results; currentConcept=''; detail = false" *ngIf="detail">
             < Back to results </a>
         </div>
         <div class="col left">
@@ -34,22 +35,24 @@
     </div>
     <div class="col right" id="textBoK" [hidden]="results"></div>
     <div class="col right" *ngIf="results">
-      <a href="javascript:void(0);"  (click)="detail = false; navigateToConcept('goBack'); conceptBase=''" *ngIf=" selectedNodes.length > 0 || (results && selectedNodes.length == 0)">
+      <a href="javascript:void(0);" (click)="detail = false; navigateToConcept('goBack'); conceptBase=''"
+        *ngIf=" selectedNodes.length > 0 || (results && selectedNodes.length == 0)">
         < To current concept </a>
-      <h3 class="center">{{selectedNodes.length}} result(s) for {{ searchText }} </h3>
-      <div *ngFor="let item of selectedNodes; index as i">
-        <div *ngIf="i < limitSearch">
-          <div class="inline"> {{item.nameShort}}</div>
-          <div class="inline" [innerHTML]="item.name | truncate: 100:searchText"></div>
-          <a href="javascript:void(0);" class="inline" (click)="navigateToConcept(item.nameShort)"> Details </a>
-          <div class="small" [innerHTML]="item.description | truncate: 100:searchText"></div>
-        </div>
-      </div>
-      <div>
-        <br>
-        <a href="javascript:void(0);"  *ngIf="limitSearch < selectedNodes.length" href="javascript:void(0);" (click)="incrementLimit()"> Show more ... </a>
+          <h3 class="center">{{selectedNodes.length}} result(s) for {{ searchText }} </h3>
+          <div *ngFor="let item of selectedNodes; index as i">
+            <div *ngIf="i < limitSearch">
+              <div class="inline"> {{item.nameShort}}</div>
+              <div class="inline" [innerHTML]="item.name | truncate: 100:searchText"></div>
+              <a href="javascript:void(0);" class="inline" (click)="navigateToConcept(item.nameShort)"> Details </a>
+              <div class="small" [innerHTML]="item.description | truncate: 100:searchText"></div>
+            </div>
+          </div>
+          <div>
+            <br>
+            <a href="javascript:void(0);" *ngIf="limitSearch < selectedNodes.length" href="javascript:void(0);"
+              (click)="incrementLimit()"> Show more ... </a>
 
-      </div>
+          </div>
     </div>
   </div>
   <app-footer>
