@@ -16,7 +16,7 @@ export class LayoutComponent implements OnInit {
   selectedNodes = [];
   results = false;
   limitSearch = 5;
-  currentConcept = null;
+  currentConcept = 'GIST';
   detail = false;
   searchCode = true;
   searchName = true;
@@ -27,53 +27,79 @@ export class LayoutComponent implements OnInit {
   currentYear = '';
   private URL_BASE = 'https://eo4geo-uji.firebaseio.com/';
 
+  limitSearchFrom = 0;
+  limitSearchTo = 8;
+  numberResultsShown = 8;
+
+  observer: MutationObserver;
+  lastBoKTitle = 'GIST';
+
+  searchInputField = '';
+
   @ViewChild('currentDescription') curentDescriptionText: ElementRef;
   @ViewChild('searchWhatFieldSn') searchWhatFieldSn: ElementRef;
+  @ViewChild('textBoK') textBoK: ElementRef;
 
   constructor(private route: ActivatedRoute, private http: HttpClient) { }
   ngOnInit() {
 
-      const id = this.route.snapshot.paramMap.get('conceptId');
-      let found = false;
-      let cVersion = 0;
-      let yearVersion = '';
-      if (id != null) {
-        this.http.get(this.URL_BASE + 'current.json')
-          .subscribe(data => {
-            cVersion = data['version'];
-            yearVersion = data['updateDate'];
-            this.currentVersion = cVersion;
-            this.currentYear = yearVersion;
-            Object.keys(data['concepts']).forEach( currentBok => {
-              if (data['concepts'][currentBok].code === id && !found ) {
-                bok.visualizeBOKData('#bubbles', this.URL_BASE , '#textBoK', cVersion, null, null, yearVersion, null);
-                setTimeout ( () => {
-                  bok.browseToConcept(id);
-                }, 1000);
-                found = true;
-              }
-            });
-            if (!found) {
-              this.searchInOldBok(id, cVersion);
+    const id = this.route.snapshot.paramMap.get('conceptId');
+    let found = false;
+    let cVersion = 0;
+    let yearVersion = '';
+    if (id != null) {
+      this.http.get(this.URL_BASE + 'current.json')
+        .subscribe(data => {
+          cVersion = data['version'];
+          yearVersion = data['updateDate'];
+          this.currentVersion = cVersion;
+          this.currentYear = yearVersion;
+          Object.keys(data['concepts']).forEach(currentBok => {
+            if (data['concepts'][currentBok].code === id && !found) {
+              bok.visualizeBOKData('#bubbles', this.URL_BASE, '#textBoK', cVersion, null, null, yearVersion, null);
+              setTimeout(() => {
+                bok.browseToConcept(id);
+              }, 1000);
+              found = true;
             }
           });
-      } else {
-        this.http.get(this.URL_BASE + 'current.json')
-          .subscribe(data => {
-            cVersion = data['version'];
-            yearVersion = data['updateDate'];
-            bok.visualizeBOKData('#bubbles', this.URL_BASE , '#textBoK', cVersion, null, null, yearVersion, null );
-          });
-      }
+          if (!found) {
+            this.searchInOldBok(id, cVersion);
+          }
+        });
+    } else {
+      this.http.get(this.URL_BASE + 'current.json')
+        .subscribe(data => {
+          cVersion = data['version'];
+          yearVersion = data['updateDate'];
+          bok.visualizeBOKData('#bubbles', this.URL_BASE, '#textBoK', cVersion, null, null, yearVersion, null);
+        });
+    }
+
+    this.observer = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
+        if ((<any>mutation.target).children[1].innerText !== this.lastBoKTitle) {
+          this.lastBoKTitle = (<any>mutation.target).children[1].innerText;
+          this.results = false;
+        }
+      });
+    });
+
+    const config = { attributes: true, childList: true, characterData: true };
+    this.observer.observe(this.textBoK.nativeElement, config);
+
   }
 
   onChangeSearchText() {
-    this.currentConcept = null;
+
+    this.currentConcept = '';
     this.conceptBase = window.location.pathname.split('/')[1];
     if (this.searchText.length >= 2) {
       this.detail = false;
       this.selectedNodes = bok.searchInBoK(this.searchText, this.searchCode, this.searchName, this.searchDes, this.searchSkills);
       this.results = this.selectedNodes.length > 0;
+      this.limitSearchTo = this.numberResultsShown;
+      this.limitSearchFrom = 0;
     } else {
       this.selectedNodes = [];
       this.results = false;
@@ -81,54 +107,52 @@ export class LayoutComponent implements OnInit {
     }
   }
 
-  incrementLimit() {
-    this.limitSearch = this.limitSearch + 5;
+  cleanResults() {
+    this.searchInputField = '';
+    this.searchText = '';
+    bok.searchInBoK('');
+    this.navigateToConcept('GIST');
   }
 
-  navigateToConcept(key) {
-    if (this.searchText.length > 2 && this.currentConcept) {
-      this.results = this.selectedNodes.length > 0;
-      this.currentConcept = null;
-      bok.browseToConcept('GIST');
-    } else if (key === 'goBack') {
-      this.searchText = '';
-      this.detail = false;
-      this.results = null;
-      bok.browseToConcept(this.conceptBase);
-      bok.cleanSearchInBOK();
-    } else {
-      this.currentConcept = key;
-      this.results = null;
-      this.detail = true;
-      bok.browseToConcept(key);
-      if (this.searchText.length > 2) {
-        setTimeout(() => {
-          const text = new HighlightPipe().transform(document.getElementById('currentDescription').innerHTML, this.searchText);
-          document.getElementById('currentDescription').innerHTML = text;
-        }, 1000);
-      }
-    }
+  incrementLimit() {
+    this.limitSearchTo = this.limitSearchTo + this.numberResultsShown;
+    this.limitSearchFrom = this.limitSearchFrom + this.numberResultsShown;
+  }
+
+  decrementLimit() {
+    this.limitSearchTo = this.limitSearchTo - this.numberResultsShown;
+    this.limitSearchFrom = this.limitSearchFrom - this.numberResultsShown;
+  }
+
+
+  navigateToConcept(conceptName) {
+    bok.browseToConcept(conceptName);
+    this.currentConcept = conceptName;
+    this.results = false;
+    console.log('Navigate to concept :' + conceptName);
   }
 
   searchInOldBok(code, version) {
     let foundInOld = false;
     const oldVersion = version - 1;
     let yearVersion = '';
-    this.http.get(this.URL_BASE + 'v' + oldVersion  + '.json')
+    this.http.get(this.URL_BASE + 'v' + oldVersion + '.json')
       .subscribe(data => {
-        yearVersion = data['creationYear'];
-        Object.keys(data['concepts']).forEach( oldBokKey => {
-          if (data['concepts'][oldBokKey].code === code) {
-            bok.visualizeBOKData('#bubbles', this.URL_BASE, '#textBoK', this.currentVersion, oldVersion,
-              'red', this.currentYear, yearVersion);
-            setTimeout ( () => {
-              bok.browseToConcept(code);
-            }, 1000);
-            foundInOld = true;
+        if (data) {
+          yearVersion = data['creationYear'];
+          Object.keys(data['concepts']).forEach(oldBokKey => {
+            if (data['concepts'][oldBokKey].code === code) {
+              bok.visualizeBOKData('#bubbles', this.URL_BASE, '#textBoK', this.currentVersion, oldVersion,
+                'red', this.currentYear, yearVersion);
+              setTimeout(() => {
+                bok.browseToConcept(code);
+              }, 1000);
+              foundInOld = true;
+            }
+          });
+          if (!foundInOld) {
+            this.searchInOldBok(code, oldVersion);
           }
-        });
-        if (!foundInOld) {
-          this.searchInOldBok(code, oldVersion);
         }
       });
   }

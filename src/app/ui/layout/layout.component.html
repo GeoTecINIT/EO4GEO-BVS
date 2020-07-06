@@ -1,6 +1,7 @@
 <app-header>
 </app-header>
-<h6 class="center">The BoK is currently under development - you are currently viewing a preliminary version. A major update is
+<h6 class="center">The BoK is currently under development - you are currently viewing a preliminary version. A major
+  update is
   expected in July 2020. Stay tuned!</h6>
 <div class="jumbotron" style="padding-top: 2%;">
   <div class="row">
@@ -17,8 +18,8 @@
           <input type="checkbox" [(ngModel)]="searchDes"> Description <br>
           <input type="checkbox" [(ngModel)]="searchSkills"> Skills / Learning outcomes <br>
           <br>
-          <a href="javascript:void(0);" (click)="results = !results; currentConcept=''; detail = false" *ngIf="detail">
-            < Back to results </a>
+          <a (click)="results = !results; currentConcept=''" *ngIf="!results && currentConcept != 'GIST'">
+            < Back to search results </a>
         </div>
         <div class="col left">
           <input id="searchInputField" [(ngModel)]="searchText" placeholder="Search term here ..."
@@ -33,27 +34,36 @@
     <div class="col left">
       <div id="bubbles"></div>
     </div>
-    <div class="col right" id="textBoK" [hidden]="results"></div>
+    <div class="col right" id="textBoK" #textBoK [hidden]="results"></div>
     <div class="col right" *ngIf="results">
-      <a href="javascript:void(0);" (click)="detail = false; navigateToConcept('goBack'); conceptBase=''"
-        *ngIf=" selectedNodes.length > 0 || (results && selectedNodes.length == 0)">
-        < To current concept </a>
-          <h3 class="center">{{selectedNodes.length}} result(s) for {{ searchText }} </h3>
-          <div *ngFor="let item of selectedNodes; index as i">
-            <div *ngIf="i < limitSearch">
-              <div class="inline"> {{item.nameShort}}</div>
-              <div class="inline" [innerHTML]="item.name | truncate: 100:searchText"></div>
-              <a href="javascript:void(0);" class="inline" (click)="navigateToConcept(item.nameShort)"> Details </a>
-              <div class="small" [innerHTML]="item.description | truncate: 100:searchText"></div>
-            </div>
-          </div>
-          <div>
-            <br>
-            <a href="javascript:void(0);" *ngIf="limitSearch < selectedNodes.length" href="javascript:void(0);"
-              (click)="incrementLimit()"> Show more ... </a>
 
+      <a (click)="results = false; cleanResults()" *ngIf="results">
+        &nbsp; X Clear search results </a>
+
+      <h3 class="center">{{selectedNodes.length}} result(s) for {{ searchText }} </h3>
+      <div *ngFor="let item of selectedNodes; index as i">
+        <div *ngIf="i < limitSearchTo && i >= limitSearchFrom">
+          <div class="inline"> {{item.nameShort}}</div>
+          <div class="inline" [innerHTML]="item.name | truncate: 100:searchText"></div>
+          <a href="javascript:void(0);" class="inline" (click)="navigateToConcept(item.nameShort)"> Details </a>
+          <div class="small" [innerHTML]="item.description | truncate: 100:searchText"></div>
+        </div>
+      </div>
+      <div>
+        <br>
+        <div class="row">
+          <div class="col right text-right">
+            <a *ngIf="limitSearchFrom > 0" (click)="decrementLimit()">
+              << Previous </a>
           </div>
+          <div class="col left text-left"> <a *ngIf="limitSearchTo < selectedNodes.length" (click)="incrementLimit()">
+              Next >>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <app-footer>
-  </app-footer>
+</div>
+<app-footer>
+</app-footer>
