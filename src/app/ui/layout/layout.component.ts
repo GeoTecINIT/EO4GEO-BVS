@@ -30,9 +30,10 @@ export class LayoutComponent implements OnInit {
   limitSearchFrom = 0;
   limitSearchTo = 8;
   numberResultsShown = 8;
+  isCopied = false;
 
   observer: MutationObserver;
-  lastBoKTitle = 'GIST';
+  lastBoKTitle = '';
 
   searchInputField = '';
 
@@ -81,6 +82,7 @@ export class LayoutComponent implements OnInit {
         if ((<any>mutation.target).children[1].innerText !== this.lastBoKTitle) {
           this.lastBoKTitle = (<any>mutation.target).children[1].innerText;
           this.results = false;
+          this.isCopied = false;
         }
       });
     });
@@ -93,6 +95,7 @@ export class LayoutComponent implements OnInit {
   onChangeSearchText() {
 
     this.currentConcept = '';
+    this.isCopied = false;
     this.conceptBase = window.location.pathname.split('/')[1];
     if (this.searchText.length >= 2) {
       this.detail = false;
@@ -107,11 +110,46 @@ export class LayoutComponent implements OnInit {
     }
   }
 
+  copyHTML() {
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    const code = this.lastBoKTitle.split(']')[0].slice(1);
+    selBox.value = '<a target="_blank" href="https://bok.eo4geo.eu/' + code  + '"> ' + this.lastBoKTitle + '  </a>';
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    selBox.setSelectionRange(0, 99999);
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+    this.isCopied = true;
+  }
+
+  copyPermalink() {
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    const code = this.lastBoKTitle.split(']')[0].slice(1);
+    selBox.value = 'https://bok.eo4geo.eu/' + code;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    selBox.setSelectionRange(0, 99999);
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+    this.isCopied = true;
+  }
+
   cleanResults() {
     this.searchInputField = '';
     this.searchText = '';
     bok.searchInBoK('');
     this.navigateToConcept('GIST');
+    this.isCopied = false;
   }
 
   incrementLimit() {

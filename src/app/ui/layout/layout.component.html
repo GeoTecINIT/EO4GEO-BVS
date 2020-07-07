@@ -25,13 +25,22 @@
           <input id="searchInputField" [(ngModel)]="searchText" placeholder="Search term here ..."
             (keyup)="onChangeSearchText()" size="30"> <br>
         </div>
-
       </div>
       <br>
     </div>
   </div>
   <div class="row">
     <div class="col left">
+      <div class="row" *ngIf="!results">
+        <div class="col left">
+          Copy to Clipboard : 
+          <button (click)="copyHTML()" class="w3-btn w3-white w3-border w3-border-blue w3-round w3-margin-left w3-margin-bottom">
+            HTML code</button>
+          <button (click)="copyPermalink()" class="w3-btn w3-white w3-border w3-border-blue w3-round w3-margin-left w3-margin-bottom">
+            Permalink</button>
+            <span *ngIf="isCopied" class="w3-margin-left w3-margin-bottom"> Copied! </span>
+        </div>
+      </div>
       <div id="bubbles"></div>
     </div>
     <div class="col right" id="textBoK" #textBoK [hidden]="results"></div>
