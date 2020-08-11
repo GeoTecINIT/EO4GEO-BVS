@@ -12,15 +12,18 @@ import { TruncatePipe } from './ui/layout/truncate.pipe';
 import { HighlightPipe } from './ui/layout/highlight.pipe';
 
 import { HttpClientModule } from '@angular/common/http';
+import { DocumentationComponent } from './documentation/documentation.component';
+import { DataTablesModule } from 'angular-datatables';
 
 @NgModule({
   declarations: [
-    AppComponent, LayoutComponent, HeaderComponent, FooterComponent, TruncatePipe, HighlightPipe],
+    AppComponent, LayoutComponent, HeaderComponent, FooterComponent, TruncatePipe, HighlightPipe, DocumentationComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
+    DataTablesModule
   ],
   providers: [],
   bootstrap: [AppComponent],

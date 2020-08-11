@@ -1,0 +1,29 @@
+<app-header>
+</app-header>
+
+<div class="jumbotron" style="padding-top: 2%;">
+  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"  class="row-border hover">
+    <thead>
+      <tr>
+        <th>Click to Open</th>
+        <th>Related Tool</th>
+        <th>Updated time</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="documents?.length != 0">
+      <tr *ngFor="let doc of documents">
+        <td> <a href="{{ doc.url }}" target="_blank"> {{ doc.name }} </a></td>
+        <td>{{ doc.tool }}</td>
+        <td>{{ doc.date | date }}</td>
+      </tr>
+    </tbody>
+    <tbody *ngIf="documents?.length == 0">
+      <tr>
+        <td colspan="3" class="no-data-available">No data!</td>
+      </tr>
+    <tbody>
+  </table>
+
+</div>
+<app-footer>
+</app-footer>
