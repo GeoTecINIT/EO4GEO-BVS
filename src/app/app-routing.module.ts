@@ -4,14 +4,14 @@ import { LayoutComponent } from './ui/layout/layout.component';
 import { DocumentationComponent } from './documentation/documentation.component';
 
 const routes: Routes = [
-  {
+/*   {
     path: 'documentation',
     component: DocumentationComponent
   },
   {
     path: 'documents',
     component: DocumentationComponent
-  },
+  }, */
   {
     path: ':conceptId',
     pathMatch: 'full',
