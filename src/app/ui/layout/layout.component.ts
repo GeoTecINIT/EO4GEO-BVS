@@ -25,7 +25,7 @@ export class LayoutComponent implements OnInit {
   conceptBase = '';
   currentVersion = 0;
   currentYear = '';
-  private URL_BASE = 'https://eo4geo-uji.firebaseio.com/';
+  private URL_BASE = 'https://eo4geo-uji-backup.firebaseio.com/';
 
   limitSearchFrom = 0;
   limitSearchTo = 8;
