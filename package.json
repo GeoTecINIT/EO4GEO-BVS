@@ -21,6 +21,10 @@
     "@angular/platform-browser": "~7.0.0",
     "@angular/platform-browser-dynamic": "~7.0.0",
     "@angular/router": "~7.0.0",
+    "@coreui/angular": "2.5.3",
+    "@coreui/coreui": "^2.1.8",
+    "@coreui/coreui-plugin-chartjs-custom-tooltips": "^1.2.0",
+    "@coreui/icons": "0.3.0",
     "@eo4geo/find-in-bok-dataviz": "^2.2.9",
     "angular-datatables": "^9.0.2",
     "bootstrap": "^4.4.1",
@@ -30,6 +34,7 @@
     "datatables.net-dt": "^1.10.21",
     "font-awesome": "^4.7.0",
     "jquery": "^3.5.1",
+    "ngx-bootstrap": "^4.2.0",
     "ngx-highlight": "0.0.3",
     "rxjs": "~6.3.3",
     "zone.js": "~0.8.26"

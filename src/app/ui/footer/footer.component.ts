@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-footer',
+  selector: 'app-eo4geo-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
