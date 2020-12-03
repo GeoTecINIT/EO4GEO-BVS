@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { HighlightPipe } from './highlight.pipe';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import * as bok from '@eo4geo/find-in-bok-dataviz';
-import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {ModalOptions} from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-layout',
@@ -40,11 +39,19 @@ export class LayoutComponent implements OnInit {
   @ViewChild('currentDescription') curentDescriptionText: ElementRef;
   @ViewChild('searchWhatFieldSn') searchWhatFieldSn: ElementRef;
   @ViewChild('textBoK') textBoK: ElementRef;
+  @ViewChild('releaseNotesModal') public releaseNotesModal: any;
 
   constructor(private route: ActivatedRoute, private http: HttpClient) { }
   ngOnInit() {
 
-    const id = this.route.snapshot.paramMap.get('conceptId');
+
+    let id = this.route.snapshot.paramMap.get('conceptId');
+    console.log('El id!!! ', id);
+    if (id === 'release-notes') {
+      this.releaseNotesModal.basicModal.config = {backdrop: true, keyboard: true};
+      this.releaseNotesModal.basicModal.show({});
+      id = 'GIST';
+    }
     let found = false;
     let cVersion = 0;
     let yearVersion = '';

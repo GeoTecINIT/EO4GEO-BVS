@@ -14,16 +14,32 @@ import { HighlightPipe } from './ui/layout/highlight.pipe';
 import { HttpClientModule } from '@angular/common/http';
 import { DocumentationComponent } from './documentation/documentation.component';
 import { DataTablesModule } from 'angular-datatables';
+import { ModalModule } from 'ngx-bootstrap';
+import { ReleaseNotesComponent } from './ui/release-notes/release-notes.component';
+import {
+  AppFooterModule,
+  AppSidebarModule
+} from '@coreui/angular';
 
 @NgModule({
   declarations: [
-    AppComponent, LayoutComponent, HeaderComponent, FooterComponent, TruncatePipe, HighlightPipe, DocumentationComponent],
+    AppComponent,
+    LayoutComponent,
+    HeaderComponent,
+    FooterComponent,
+    ReleaseNotesComponent,
+    TruncatePipe,
+    HighlightPipe,
+    DocumentationComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    DataTablesModule
+    DataTablesModule,
+    AppFooterModule,
+    AppSidebarModule,
+    ModalModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],

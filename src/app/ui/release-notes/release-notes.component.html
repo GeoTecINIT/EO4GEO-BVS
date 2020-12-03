@@ -1,0 +1,62 @@
+<!-- Modal -->
+<div bsModal #releaseModal="bs-modal" class="modal fade" id="releaseModal" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="releaseModalTitle">Release Notes</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="releaseModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <br>
+        <h4>v4.0 - October 2020</h4>
+        <ul>
+          <li>Added license</li>
+          <li>Added similar to and prerequisite relations</li>
+          <li>Handle concepts with two parents</li>
+        </ul>
+
+        <br>
+        <h4>v3.0 - May 2020</h4>
+        <ul>
+          <li>Create npm package find-in-bok-dataviz</li>
+          <li>Added BoK versioning</li>
+        </ul>
+
+        <br>
+        <h4>v2.0 - March 2020</h4>
+        <ul>
+          <li>Added permalinks for concept resolving</li>
+          <li>Linked official subdomain</li>
+        </ul>
+
+        <br>
+        <h4>v1.1 - February 2020</h4>
+        <ul>
+          <li>Create npm package bok-dataviz</li>
+          <li>Read from JSON-LD instead of XML</li>
+        </ul>
+
+        <br>
+        <h4>v1.0 - April 2019</h4>
+        <ul>
+          <li>Cleaned duplicated relations</li>
+          <li>Added search by attributes</li>
+          <li>Added two letters concept codes </li>
+        </ul>
+
+        <br>
+        <h4>v0.1 - November 2018</h4>
+        <ul>
+          <li>First version displaying customxml from GIN2K BoK</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="releaseModal.hide()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
