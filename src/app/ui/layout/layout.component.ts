@@ -24,7 +24,7 @@ export class LayoutComponent implements OnInit {
   conceptBase = '';
   currentVersion = 0;
   currentYear = '';
-  private URL_BASE = 'https://eo4geo-uji-backup.firebaseio.com/';
+  private URL_BASE = 'https://ucgis-bok-default-rtdb.firebaseio.com/';
 
   limitSearchFrom = 0;
   limitSearchTo = 8;
@@ -46,12 +46,12 @@ export class LayoutComponent implements OnInit {
 
 
     let id = this.route.snapshot.paramMap.get('conceptId');
-    console.log('El id!!! ', id);
-    if (id === 'release-notes') {
+    // console.log('El id!!! ', id);
+   /*  if (id === 'release-notes') {
       this.releaseNotesModal.basicModal.config = {backdrop: true, keyboard: true};
       this.releaseNotesModal.basicModal.show({});
       id = 'GIST';
-    }
+    } */
     let found = false;
     let cVersion = 0;
     let yearVersion = '';
@@ -67,13 +67,13 @@ export class LayoutComponent implements OnInit {
               bok.visualizeBOKData('#bubbles', this.URL_BASE, '#textBoK', cVersion, null, null, yearVersion, null);
               setTimeout(() => {
                 bok.browseToConcept(id);
-              }, 1000);
+              }, 1000); 
               found = true;
             }
           });
-          if (!found) {
+        /*   if (!found) {
             this.searchInOldBok(id, cVersion);
-          }
+          } */
         });
     } else {
       this.http.get(this.URL_BASE + 'current.json')
@@ -124,7 +124,7 @@ export class LayoutComponent implements OnInit {
     selBox.style.top = '0';
     selBox.style.opacity = '0';
     const code = this.lastBoKTitle.split(']')[0].slice(1);
-    selBox.value = '<a target="_blank" href="https://bok.eo4geo.eu/' + code  + '"> ' + this.lastBoKTitle + '  </a>';
+    selBox.value = '<a target="_blank" href="https://ucgis-bok.web.app/' + code  + '"> ' + this.lastBoKTitle + '  </a>';
     document.body.appendChild(selBox);
     selBox.focus();
     selBox.select();
@@ -141,7 +141,7 @@ export class LayoutComponent implements OnInit {
     selBox.style.top = '0';
     selBox.style.opacity = '0';
     const code = this.lastBoKTitle.split(']')[0].slice(1);
-    selBox.value = 'https://bok.eo4geo.eu/' + code;
+    selBox.value = 'https://ucgis-bok.web.app/' + code;
     document.body.appendChild(selBox);
     selBox.focus();
     selBox.select();
@@ -195,9 +195,9 @@ export class LayoutComponent implements OnInit {
               foundInOld = true;
             }
           });
-          if (!foundInOld) {
+         /*  if (!foundInOld) {
             this.searchInOldBok(code, oldVersion);
-          }
+          } */
         }
       });
   }
