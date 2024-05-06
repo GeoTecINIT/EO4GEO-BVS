@@ -66,7 +66,7 @@ export class LayoutComponent implements OnInit {
             if (data['concepts'][currentBok].code === id && !found) {
               bok.visualizeBOKData('#bubbles', this.URL_BASE, '#textBoK', cVersion, null, null, yearVersion, null);
               setTimeout(() => {
-                bok.browseToConcept(id);
+                if (id !== "" && id !== "GIST") bok.browseToConcept(id);
               }, 1000);
               found = true;
             }
@@ -190,7 +190,7 @@ export class LayoutComponent implements OnInit {
               bok.visualizeBOKData('#bubbles', this.URL_BASE, '#textBoK', this.currentVersion, oldVersion,
                 'red', this.currentYear, yearVersion);
               setTimeout(() => {
-                bok.browseToConcept(code);
+                if (code !== "" && code !== "GIST") bok.browseToConcept(code);
               }, 1000);
               foundInOld = true;
             }
