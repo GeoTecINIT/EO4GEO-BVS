@@ -25,7 +25,6 @@ export class LayoutComponent implements OnInit {
   conceptBase = '';
   currentVersion = 0;
   currentYear = '';
-  private URL_BASE = 'https://eo4geo-uji-backup.firebaseio.com/';
 
   limitSearchFrom = 0;
   limitSearchTo = 8;
@@ -44,47 +43,7 @@ export class LayoutComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private http: HttpClient, private firebaseService: FirebaseService) { }
   ngOnInit() {
-
-
-    let id = this.route.snapshot.paramMap.get('conceptId');
-    console.log('El id!!! ', id);
-    if (id === 'release-notes') {
-      this.releaseNotesModal.basicModal.config = {backdrop: true, keyboard: true};
-      this.releaseNotesModal.basicModal.show({});
-      id = 'GIST';
-    }
-    let found = false;
-    let cVersion = 0;
-    let yearVersion = '';
-    if (id != null) {
-      this.http.get(this.URL_BASE + 'current.json')
-        .subscribe(data => {
-          cVersion = data['version'];
-          yearVersion = data['updateDate'];
-          this.currentVersion = cVersion;
-          this.currentYear = yearVersion;
-          Object.keys(data['concepts']).forEach(currentBok => {
-            if (data['concepts'][currentBok].code === id && !found) {
-              bok.visualizeBOKData('#bubbles', this.URL_BASE, '#textBoK', cVersion, null, null, yearVersion, null);
-              setTimeout(() => {
-                if (id !== "" && id !== "GIST") bok.browseToConcept(id);
-              }, 1000);
-              found = true;
-            }
-          });
-          if (!found) {
-            this.searchInOldBok(id, cVersion);
-          }
-        });
-    } else {
-      this.http.get(this.URL_BASE + 'current.json')
-        .subscribe(data => {
-          cVersion = data['version'];
-          yearVersion = data['updateDate'];
-          bok.visualizeBOKData('#bubbles', this.URL_BASE, '#textBoK', cVersion, null, null, yearVersion, null);
-        });
-    }
-
+    this.setUpD3();
     this.observer = new MutationObserver(mutations => {
       mutations.forEach(mutation => {
         if ((<any>mutation.target).children[1].innerText !== this.lastBoKTitle) {
@@ -98,6 +57,43 @@ export class LayoutComponent implements OnInit {
     const config = { attributes: true, childList: true, characterData: true };
     this.observer.observe(this.textBoK.nativeElement, config);
 
+  }
+
+  private async setUpD3() {
+    let id = this.route.snapshot.paramMap.get('conceptId');
+    console.log('El id!!! ', id);
+    if (id === 'release-notes') {
+      this.releaseNotesModal.basicModal.config = {backdrop: true, keyboard: true};
+      this.releaseNotesModal.basicModal.show({});
+      id = 'GIST';
+    }
+    let found = false;
+    let cVersion = 0;
+    let yearVersion = '';
+    const data = await this.firebaseService.getBokVersion('current');
+    const versionsData = await this.firebaseService.getOldVersionsData();
+    if (id != null) {
+      cVersion = data['version'];
+      yearVersion = data['updateDate'];
+      this.currentVersion = cVersion;
+      this.currentYear = yearVersion;
+      Object.keys(data['concepts']).forEach(currentBok => {
+        if (data['concepts'][currentBok].code === id && !found) {
+          bok.visualizeBOKData('#bubbles', 'https://eo4geo-uji-backup.firebaseio.com/', '#textBoK', cVersion, null, null, yearVersion, null);
+          setTimeout(() => {
+            if (id !== "" && id !== "GIST") bok.browseToConcept(id);
+          }, 1000);
+          found = true;
+        }
+      });
+      if (!found) {
+        await this.searchInOldBok(id, cVersion);
+      }
+    } else {
+      cVersion = data['version'];
+      yearVersion = data['updateDate'];
+      bok.visualizeBOKData('#bubbles', 'https://eo4geo-uji-backup.firebaseio.com/', '#textBoK', cVersion, null, null, yearVersion, null);
+    }
   }
 
   onChangeSearchText() {
@@ -178,28 +174,27 @@ export class LayoutComponent implements OnInit {
     console.log('Navigate to concept :' + conceptName);
   }
 
-  searchInOldBok(code, version) {
+  async searchInOldBok(code: string, version: number) {
     let foundInOld = false;
     const oldVersion = version - 1;
     let yearVersion = '';
-    this.http.get(this.URL_BASE + 'v' + oldVersion + '.json')
-      .subscribe(data => {
-        if (data) {
-          yearVersion = data['creationYear'];
-          Object.keys(data['concepts']).forEach(oldBokKey => {
-            if (data['concepts'][oldBokKey].code === code) {
-              bok.visualizeBOKData('#bubbles', this.URL_BASE, '#textBoK', this.currentVersion, oldVersion,
-                'red', this.currentYear, yearVersion);
-              setTimeout(() => {
-                if (code !== "" && code !== "GIST") bok.browseToConcept(code);
-              }, 1000);
-              foundInOld = true;
-            }
-          });
-          if (!foundInOld) {
-            this.searchInOldBok(code, oldVersion);
-          }
+    const data = await this.firebaseService.getBokVersion('current');
+    const versionsData = await this.firebaseService.getOldVersionsData();
+    if (data) {
+      yearVersion = data['creationYear'];
+      Object.keys(data['concepts']).forEach(oldBokKey => {
+        if (data['concepts'][oldBokKey].code === code) {
+          bok.visualizeBOKData('#bubbles', 'https://eo4geo-uji-backup.firebaseio.com/', '#textBoK', this.currentVersion, oldVersion,
+            'red', this.currentYear, yearVersion);
+          setTimeout(() => {
+            if (code !== "" && code !== "GIST") bok.browseToConcept(code);
+          }, 1000);
+          foundInOld = true;
         }
       });
+      if (!foundInOld) {
+        await this.searchInOldBok(code, oldVersion);
+      }
+    }
   }
 }

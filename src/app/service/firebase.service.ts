@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
 export class FirebaseService {
 
   private URL_BASE = 'https://eo4geo-uji-backup.firebaseio.com/';
-  private bokMap: Map<string, undefined>;
+  private bokMap: Map<string, object>;
   private versionsMap: Map<string, string>;
   private currentVersion: string;
 
@@ -17,24 +17,26 @@ export class FirebaseService {
     const currentVersionUrl = 'current/version.json';
     this.getDataFromFirebase(currentVersionUrl).then((response) => {
       this.currentVersion = 'v' + response;
-      console.log(this.currentVersion);
     });
   }
 
   async getBokVersion(version: string) {
-    if (!this.bokMap.has(version)){
-      const bok = await this.getDataFromFirebase(version + '.json');
-      this.bokMap.set(version, bok);
+    const queryVersion = version === this.currentVersion ? 'current' : version;
+    if (!this.bokMap.has(queryVersion)){
+      const bok = await this.getDataFromFirebase(queryVersion + '.json');
+      this.bokMap.set(queryVersion, bok);
     }
-    return this.bokMap.get(version);
+    return this.bokMap.get(queryVersion);
   }
 
-  async getVersionsData() {
+  async getOldVersionsData() {
     if(this.versionsMap.size === 0) {
       const versionsUrl = '.json?shallow=true';
       const versionsObject = await this.getDataFromFirebase(versionsUrl);
+      delete versionsObject[this.currentVersion];
+      delete versionsObject['current'];
       const versionsArray = Object.keys(versionsObject);
-      for(let key in versionsArray) {
+      for(let key of versionsArray) {
         const dateUrl = `${key}/creationYear.json`;
         this.versionsMap.set(key, await this.getDataFromFirebase(dateUrl));
       }
