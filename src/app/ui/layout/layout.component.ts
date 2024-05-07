@@ -3,6 +3,7 @@ import * as bok from '@eo4geo/find-in-bok-dataviz';
 import {ActivatedRoute} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {ModalOptions} from 'ngx-bootstrap';
+import { FirebaseService } from 'src/app/service/firebase.service';
 
 @Component({
   selector: 'app-layout',
@@ -41,7 +42,7 @@ export class LayoutComponent implements OnInit {
   @ViewChild('textBoK') textBoK: ElementRef;
   @ViewChild('releaseNotesModal') public releaseNotesModal: any;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) { }
+  constructor(private route: ActivatedRoute, private http: HttpClient, private firebaseService: FirebaseService) { }
   ngOnInit() {
 
 
