@@ -61,7 +61,6 @@ export class LayoutComponent implements OnInit {
 
   private async setUpD3() {
     let id = this.route.snapshot.paramMap.get('conceptId');
-    console.log('El id!!! ', id);
     if (id === 'release-notes') {
       this.releaseNotesModal.basicModal.config = {backdrop: true, keyboard: true};
       this.releaseNotesModal.basicModal.show({});
@@ -79,7 +78,7 @@ export class LayoutComponent implements OnInit {
       this.currentYear = yearVersion;
       Object.keys(data['concepts']).forEach(currentBok => {
         if (data['concepts'][currentBok].code === id && !found) {
-          bok.visualizeBOKData('#bubbles', 'https://eo4geo-uji-backup.firebaseio.com/', '#textBoK', cVersion, null, null, yearVersion, null);
+          bok.visualizeBOKData('#bubbles', '#textBoK', data, versionsData, cVersion, this.currentVersion, this.currentYear, false, false);
           setTimeout(() => {
             if (id !== "" && id !== "GIST") bok.browseToConcept(id);
           }, 1000);
@@ -92,7 +91,7 @@ export class LayoutComponent implements OnInit {
     } else {
       cVersion = data['version'];
       yearVersion = data['updateDate'];
-      bok.visualizeBOKData('#bubbles', 'https://eo4geo-uji-backup.firebaseio.com/', '#textBoK', cVersion, null, null, yearVersion, null);
+      bok.visualizeBOKData('#bubbles', '#textBoK', data, versionsData, cVersion, this.currentVersion, this.currentYear, false, false);
     }
   }
 
@@ -184,8 +183,7 @@ export class LayoutComponent implements OnInit {
       yearVersion = data['creationYear'];
       Object.keys(data['concepts']).forEach(oldBokKey => {
         if (data['concepts'][oldBokKey].code === code) {
-          bok.visualizeBOKData('#bubbles', 'https://eo4geo-uji-backup.firebaseio.com/', '#textBoK', this.currentVersion, oldVersion,
-            'red', this.currentYear, yearVersion);
+          bok.visualizeBOKData('#bubbles', '#textBoK', data, versionsData, version, this.currentVersion, this.currentYear, yearVersion, true, false);
           setTimeout(() => {
             if (code !== "" && code !== "GIST") bok.browseToConcept(code);
           }, 1000);
