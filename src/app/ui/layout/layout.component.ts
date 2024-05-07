@@ -71,9 +71,9 @@ export class LayoutComponent implements OnInit {
     let yearVersion = '';
     const data = await this.firebaseService.getBokVersion('current');
     const versionsData = await this.firebaseService.getOldVersionsData();
+    cVersion = data['version'];
+    yearVersion = data['updateDate'];
     if (id != null) {
-      cVersion = data['version'];
-      yearVersion = data['updateDate'];
       this.currentVersion = cVersion;
       this.currentYear = yearVersion;
       Object.keys(data['concepts']).forEach(currentBok => {
@@ -89,8 +89,6 @@ export class LayoutComponent implements OnInit {
         await this.searchInOldBok(id, cVersion);
       }
     } else {
-      cVersion = data['version'];
-      yearVersion = data['updateDate'];
       bok.visualizeBOKData('#bubbles', '#textBoK', data, versionsData, cVersion, this.currentVersion, this.currentYear, false, false);
     }
   }
