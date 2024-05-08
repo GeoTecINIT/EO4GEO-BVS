@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import * as bok from '@eo4geo/find-in-bok-dataviz';
 import {ActivatedRoute} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
@@ -174,14 +174,12 @@ export class LayoutComponent implements OnInit {
   async searchInOldBok(code: string, version: number) {
     let foundInOld = false;
     const oldVersion = version - 1;
-    let yearVersion = '';
     const data = await this.firebaseService.getBokVersion('current');
     const versionsData = await this.firebaseService.getOldVersionsData();
     if (data) {
-      yearVersion = data['creationYear'];
       Object.keys(data['concepts']).forEach(oldBokKey => {
         if (data['concepts'][oldBokKey].code === code) {
-          bok.visualizeBOKData('#bubbles', '#textBoK', data, versionsData, version, this.currentVersion, this.currentYear, yearVersion, true, false);
+          bok.visualizeBOKData('#bubbles', '#textBoK', data, versionsData, version, this.currentVersion, this.currentYear, true, false);
           setTimeout(() => {
             if (code !== "" && code !== "GIST") bok.browseToConcept(code);
           }, 1000);
@@ -192,5 +190,24 @@ export class LayoutComponent implements OnInit {
         await this.searchInOldBok(code, oldVersion);
       }
     }
+  }
+
+  @HostListener('click', ['$event'])
+  onClick(event: MouseEvent) {
+    const clickedElement = event.target as HTMLElement;
+    if (clickedElement.id === "oldVersionLink") {
+      this.handleClick(parseInt(clickedElement.dataset.value), clickedElement.dataset.code);
+    }
+  }
+
+  async handleClick(version: number, code: string) {
+    const mainNode = document.getElementById('bubbles');
+    mainNode.innerHTML = "";
+    const data = await this.firebaseService.getBokVersion("v" + version);
+    const versionsData = await this.firebaseService.getOldVersionsData();
+    bok.visualizeBOKData('#bubbles', '#textBoK', data, versionsData, version, this.currentVersion, this.currentYear, false, true);
+    setTimeout(() => {
+      if (code !== "" && code !== "GIST") bok.browseToConcept(code);
+    }, 1000);
   }
 }
