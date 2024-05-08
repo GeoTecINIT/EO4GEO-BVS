@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 
 export class FirebaseService {
 
-  private URL_BASE = 'https://eo4geo-uji-backup.firebaseio.com/';
+  private URL_BASE = 'https://findinbok.firebaseio.com/';
   private bokMap: Map<string, object>;
   private versionsMap: Map<string, string>;
   private currentVersion: string;
