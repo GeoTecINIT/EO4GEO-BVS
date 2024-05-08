@@ -192,12 +192,9 @@ export class LayoutComponent implements OnInit {
     }
   }
 
-  @HostListener('click', ['$event'])
-  onClick(event: MouseEvent) {
-    const clickedElement = event.target as HTMLElement;
-    if (clickedElement.id === "oldVersionLink") {
-      this.handleClick(parseInt(clickedElement.dataset.value), clickedElement.dataset.code);
-    }
+  @HostListener('document:loadOldBokEvent', ['$event'])
+  onClick(event: CustomEvent) {
+    this.handleClick(parseInt(event.detail.version), event.detail.code);
   }
 
   async handleClick(version: number, code: string) {
