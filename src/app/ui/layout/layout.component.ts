@@ -3,7 +3,6 @@ import * as bok from '@eo4geo/find-in-bok-dataviz';
 import {ActivatedRoute} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {ModalOptions} from 'ngx-bootstrap';
-import { FirebaseService } from 'src/app/service/firebase.service';
 
 @Component({
   selector: 'app-layout',
@@ -41,7 +40,7 @@ export class LayoutComponent implements OnInit {
   @ViewChild('textBoK') textBoK: ElementRef;
   @ViewChild('releaseNotesModal') public releaseNotesModal: any;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, private firebaseService: FirebaseService) { }
+  constructor(private route: ActivatedRoute, private http: HttpClient) { }
   ngOnInit() {
     this.setUpD3();
     this.observer = new MutationObserver(mutations => {
@@ -66,31 +65,7 @@ export class LayoutComponent implements OnInit {
       this.releaseNotesModal.basicModal.show({});
       id = 'GIST';
     }
-    let found = false;
-    let cVersion = 0;
-    let yearVersion = '';
-    const data = await this.firebaseService.getBokVersion('current');
-    const versionsData = await this.firebaseService.getOldVersionsData();
-    cVersion = data['version'];
-    yearVersion = data['updateDate'];
-    if (id != null) {
-      this.currentVersion = cVersion;
-      this.currentYear = yearVersion;
-      Object.keys(data['concepts']).forEach(currentBok => {
-        if (data['concepts'][currentBok].code === id && !found) {
-          bok.visualizeBOKData('#bubbles', '#textBoK', data, versionsData, cVersion, this.currentVersion, this.currentYear, false, false);
-          setTimeout(() => {
-            if (id !== "" && id !== "GIST") bok.browseToConcept(id);
-          }, 1000);
-          found = true;
-        }
-      });
-      if (!found) {
-        await this.searchInOldBok(id, cVersion);
-      }
-    } else {
-      bok.visualizeBOKData('#bubbles', '#textBoK', data, versionsData, cVersion, this.currentVersion, this.currentYear, false, false);
-    }
+    bok.visualizeBOKData('https://findinbok.firebaseio.com/', id);
   }
 
   onChangeSearchText() {
@@ -169,42 +144,5 @@ export class LayoutComponent implements OnInit {
     this.currentConcept = conceptName;
     this.results = false;
     console.log('Navigate to concept :' + conceptName);
-  }
-
-  async searchInOldBok(code: string, version: number) {
-    let foundInOld = false;
-    const oldVersion = version - 1;
-    const data = await this.firebaseService.getBokVersion('current');
-    const versionsData = await this.firebaseService.getOldVersionsData();
-    if (data) {
-      Object.keys(data['concepts']).forEach(oldBokKey => {
-        if (data['concepts'][oldBokKey].code === code) {
-          bok.visualizeBOKData('#bubbles', '#textBoK', data, versionsData, version, this.currentVersion, this.currentYear, true, false);
-          setTimeout(() => {
-            if (code !== "" && code !== "GIST") bok.browseToConcept(code);
-          }, 1000);
-          foundInOld = true;
-        }
-      });
-      if (!foundInOld) {
-        await this.searchInOldBok(code, oldVersion);
-      }
-    }
-  }
-
-  @HostListener('document:loadOldBokEvent', ['$event'])
-  onClick(event: CustomEvent) {
-    this.handleClick(parseInt(event.detail.version), event.detail.code);
-  }
-
-  async handleClick(version: number, code: string) {
-    const mainNode = document.getElementById('bubbles');
-    mainNode.innerHTML = "";
-    const data = await this.firebaseService.getBokVersion("v" + version);
-    const versionsData = await this.firebaseService.getOldVersionsData();
-    bok.visualizeBOKData('#bubbles', '#textBoK', data, versionsData, version, this.currentVersion, this.currentYear, false, true);
-    setTimeout(() => {
-      if (code !== "" && code !== "GIST") bok.browseToConcept(code);
-    }, 1000);
   }
 }

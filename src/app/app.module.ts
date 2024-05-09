@@ -20,7 +20,6 @@ import {
   AppFooterModule,
   AppSidebarModule
 } from '@coreui/angular';
-import { FirebaseService } from './service/firebase.service';
 
 @NgModule({
   declarations: [
@@ -42,7 +41,7 @@ import { FirebaseService } from './service/firebase.service';
     AppSidebarModule,
     ModalModule.forRoot(),
       ],
-  providers: [FirebaseService],
+  providers: [],
   bootstrap: [AppComponent],
   exports: [LayoutComponent]
 })
