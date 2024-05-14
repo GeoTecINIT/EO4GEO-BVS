@@ -1,6 +1,6 @@
 {
   "name": "findinbok",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -25,7 +25,7 @@
     "@coreui/coreui": "^2.1.8",
     "@coreui/coreui-plugin-chartjs-custom-tooltips": "^1.2.0",
     "@coreui/icons": "0.3.0",
-    "@eo4geo/find-in-bok-dataviz": "^2.2.12",
+    "@eo4geo/find-in-bok-dataviz": "^3.0.0",
     "angular-datatables": "^9.0.2",
     "bootstrap": "^4.4.1",
     "core-js": "^2.5.4",
