@@ -42,7 +42,7 @@
       </div>
       <div id="bubbles"></div>
     </div>
-    <div class="col right" id="textBoK" #textBoK [hidden]="results"></div>
+    <div class="col right" id="textInfo" #textInfo [hidden]="results"></div>
     <div class="col right" *ngIf="results">
 
       <a (click)="results = false; cleanResults()" *ngIf="results">

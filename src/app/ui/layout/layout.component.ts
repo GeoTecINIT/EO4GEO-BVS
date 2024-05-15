@@ -37,7 +37,7 @@ export class LayoutComponent implements OnInit {
 
   @ViewChild('currentDescription') curentDescriptionText: ElementRef;
   @ViewChild('searchWhatFieldSn') searchWhatFieldSn: ElementRef;
-  @ViewChild('textBoK') textBoK: ElementRef;
+  @ViewChild('textInfo') textInfo: ElementRef;
   @ViewChild('releaseNotesModal') public releaseNotesModal: any;
 
   constructor(private route: ActivatedRoute, private http: HttpClient) { }
@@ -54,7 +54,7 @@ export class LayoutComponent implements OnInit {
     });
 
     const config = { attributes: true, childList: true, characterData: true };
-    this.observer.observe(this.textBoK.nativeElement, config);
+    this.observer.observe(this.textInfo.nativeElement, config);
 
   }
 
