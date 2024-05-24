@@ -65,7 +65,15 @@ export class LayoutComponent implements OnInit {
       this.releaseNotesModal.basicModal.show({});
       id = 'GIST';
     }
-    bok.visualizeBOKData('https://findinbok.firebaseio.com/', id);
+    const inputObject = {
+      svgId: '#bubbles',
+      textId: '#textInfo',
+      urls: ['https://findinbok.firebaseio.com/'],
+      conceptId: id,
+      versions: true,
+    };
+
+    bok.visualizeBOKData(inputObject);
   }
 
   onChangeSearchText() {
