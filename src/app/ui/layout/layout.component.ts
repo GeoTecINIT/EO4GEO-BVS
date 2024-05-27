@@ -3,6 +3,7 @@ import * as bok from '@eo4geo/find-in-bok-dataviz';
 import {ActivatedRoute} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {ModalOptions} from 'ngx-bootstrap';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-layout',
@@ -68,7 +69,7 @@ export class LayoutComponent implements OnInit {
     const inputObject = {
       svgId: '#bubbles',
       textId: '#textInfo',
-      urls: ['https://findinbok.firebaseio.com/'],
+      urls: environment.URL_ARRAY,
       conceptId: id,
       versions: true,
     };
