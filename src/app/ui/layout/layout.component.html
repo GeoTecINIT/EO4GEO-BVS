@@ -27,7 +27,10 @@
       <br>
     </div>
   </div>
-  <div class="row">
+  <div *ngIf="loading">
+    <app-loading-indicator style="margin: auto;"></app-loading-indicator>
+  </div>
+  <div class="row" [hidden]="loading">
     <div class="col left">
       <div class="row" *ngIf="!results">
 

@@ -20,6 +20,7 @@ import {
   AppFooterModule,
   AppSidebarModule
 } from '@coreui/angular';
+import { LoadingIndicatorComponent } from './ui/loading-indicator/loading-indicator.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,9 @@ import {
     ReleaseNotesComponent,
     TruncatePipe,
     HighlightPipe,
-    DocumentationComponent],
+    DocumentationComponent,
+    LoadingIndicatorComponent
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

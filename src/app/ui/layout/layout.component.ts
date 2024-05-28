@@ -4,6 +4,7 @@ import {ActivatedRoute} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {ModalOptions} from 'ngx-bootstrap';
 import { environment } from 'src/environments/environment';
+import { timeout } from 'd3';
 
 @Component({
   selector: 'app-layout',
@@ -35,6 +36,8 @@ export class LayoutComponent implements OnInit {
   lastBoKTitle = '';
 
   searchInputField = '';
+
+  loading = false;
 
   @ViewChild('currentDescription') curentDescriptionText: ElementRef;
   @ViewChild('searchWhatFieldSn') searchWhatFieldSn: ElementRef;
@@ -74,7 +77,11 @@ export class LayoutComponent implements OnInit {
       versions: true,
     };
 
+    this.loading = true;
     bok.visualizeBOKData(inputObject);
+    setTimeout(() => {
+      this.loading = false;
+    }, 3000)
   }
 
   onChangeSearchText() {
