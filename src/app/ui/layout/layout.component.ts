@@ -75,6 +75,7 @@ export class LayoutComponent implements OnInit {
       urls: environment.URL_ARRAY,
       conceptId: id,
       versions: true,
+      updateUrl: true,
     };
 
     this.loading = true;
