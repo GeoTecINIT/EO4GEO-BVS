@@ -79,10 +79,9 @@ export class LayoutComponent implements OnInit {
     };
 
     this.loading = true;
-    bok.visualizeBOKData(inputObject);
-    setTimeout(() => {
+    bok.visualizeBOKData(inputObject).then(() => {
       this.loading = false;
-    }, 3000)
+    })
   }
 
   onChangeSearchText() {
